@@ -3,7 +3,7 @@ Aidan Chin, Robert Yao, Alexander Shub, Gerard DeCunha
 
 ## Motivation
 
-TODO
+Out of all the projects listed, this one stood out to our group as being the most suited for our areas of interest/expertise. We have lots of experience with basic microcontrollers such as the AVR platform and utilizing them for communication, so the task of creating a simple protocol seems like a natural extension of this interest. This is also a great opportunity for us to increase our knowledge and understand the way systems interact and the particular challenges that come with them. The project will also be a good exercise in networking separate systems on different platforms, namely edges with a central Pi running the algorithm. 
 
 ## Design Goals
 - Develop a time synchronization protocol using timestamped sensor data from two embedded devices.
@@ -28,8 +28,52 @@ TODO
 
 ## System Blocks
 
-TODO
+```mermaid
+flowchart TD
+ subgraph Programming["Programming"]
+        RPI_USB["Raspberry Pi USB Port"]
+        ESP_PROG["ESP32 Programming Port UART/USB"]
+  end
+    PWR["Power Supply"] --> RPI["Raspberry Pi"] & ESP["ESP32"] & Sensor["Sensor (TBD)"]
+    RPI <==> ESP
+    ESP <--> Sensor
+    RPI_USB --- RPI
+    ESP_PROG --- ESP
 
+
+     RPI_USB:::Aqua
+     ESP_PROG:::Rose
+     RPI:::Aqua
+     ESP:::Rose
+    classDef Aqua stroke-width:1px, stroke-dasharray:none, stroke:#46EDC8, fill:#DEFFF8, color:#378E7A
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+```
+```mermaid
+flowchart LR
+ subgraph RPI["Raspberry Pi"]
+        TS["Time Sync Protocol"]
+        RPI_COMM["Communication Thread"]
+  end
+ subgraph ESP["ESP32"]
+        ESP_COMM["Communication Thread"]
+        SENSOR["Sensor Communication"]
+  end
+    TS <--> RPI_COMM
+    ESP_COMM <--> SENSOR
+    RPI_COMM <--> ESP_COMM
+
+
+     TS:::Aqua
+     RPI_COMM:::Pine
+     RPI_COMM:::Peach
+     ESP_COMM:::Peach
+     SENSOR:::Rose
+    classDef Aqua stroke-width:1px, stroke-dasharray:none, stroke:#46EDC8, fill:#DEFFF8, color:#378E7A
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+    classDef Pine stroke-width:1px, stroke-dasharray:none, stroke:#254336, fill:#27654A, color:#FFFFFF
+    classDef Peach stroke-width:1px, stroke-dasharray:none, stroke:#FBB35A, fill:#FFEFDB, color:#8F632D
+
+```
 ## HW/SW Requirements
 
 | Component       | Purpose                                  |
